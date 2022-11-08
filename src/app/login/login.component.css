@@ -1,0 +1,14 @@
+
+.login-logo p {
+  color: #6e44c2;
+  /*font-family: Arial;*/
+  text-shadow: 0.1em 0.1em 0.2em black
+}
+
+.card {
+  border-radius: 15px;
+}
+
+button {
+  background-color: #6e44c2;
+}
