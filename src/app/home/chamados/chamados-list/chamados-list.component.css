@@ -1,0 +1,16 @@
+.card-body {
+  padding: 0.25rem 1.25rem 1.25rem 1.25rem;
+}
+
+.busca input {
+  height: 40px;
+}
+
+.busca p-calendar {
+  height: 40px;
+}
+
+:host ::ng-deep .p-calendar {
+  width: 100%;
+  height: 40px;
+}

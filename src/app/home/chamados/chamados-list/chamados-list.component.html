@@ -1,0 +1,236 @@
+<div style="margin: 20px">
+  <!-- Main content -->
+  <section class="content">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h3 class="m-0">Lista de Chamados</h3>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">
+                <a [routerLink]="['']">Home</a>
+              </li>
+              <li class="breadcrumb-item active">
+                Chamados
+              </li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- Default box -->
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header with-border">
+            <!--            <h3 class="card-title">Lista de Processos Administrativos</h3>-->
+            <!--            <button class="btn btn-warning float-right" [routerLink]="['relatorio']">Relatório</button>-->
+
+
+            <!--            <div class="row float-right w-40">-->
+            <!--              <form id="formFiltro" name="formFiltro" method="post" (submit)="getProcessoByProcessoAndTipo()" [formGroup]="formFiltro">-->
+            <!--                <label class="input-group mr-4">-->
+            <!--                  <input type="text" class="form-control" [(ngModel)]="processoInput" placeholder="Buscar pelo número do processo" id="processoInput" name="processoInput" formControlName="processoInput">-->
+            <!--                  <div class="input-group-prepend">-->
+            <!--                    <button type="button" class="btn btn-primary" (click)="getProcessoByProcessoAndTipo()"><i class="fas fa-search"></i></button>-->
+            <!--                  </div>-->
+            <!--                  <div class="input-group-prepend">-->
+            <!--                    <button type="reset" class="btn btn-danger" (click)="getProcessosAdmAbertos()"><i class="fas fa-times"></i></button>-->
+            <!--                  </div>-->
+            <!--                </label>-->
+            <!--              </form>-->
+            <!--            </div>-->
+
+            <!--            <a [routerLink]="['cadastra']" class="btn btn-outline-primary float-left ">-->
+            <!--              + Novo Chamado-->
+            <!--            </a>-->
+            <button pButton type="button" label="+ Novo Chamado" class="p-button-sm p-button-help p-button-outlined"></button>
+
+
+
+            <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+              <label class="btn btn-outline-dark active">
+                <input type="radio" name="options" id="option_a1" autocomplete="off" checked="" > Chamados Abertos
+              </label>
+              <label class="btn btn-outline-dark">
+                <input type="radio" name="options" id="option_a2" autocomplete="off" > Chamados Concluídos
+              </label>
+              <label class="btn btn-outline-dark">
+                <input type="radio" name="options" id="option_a3" autocomplete="off" > Todos os Chamados
+              </label>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="row">
+              <p-table
+                #dt
+                [value]="chamados"
+                [(selection)]="selectedChamados"
+                dataKey="id"
+                styleClass="p-datatable-customers"
+                [rowHover]="true"
+                [rows]="10"
+                [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [loading]="loading"
+                [paginator]="true"
+                currentPageReportTemplate="Chamado {first} à {last} de {totalRecords}"
+                [filterDelay]="0"
+              >
+
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width: 10%" pSortableColumn="id">
+                      Id <p-sortIcon field="id"></p-sortIcon>
+                    </th>
+                    <th style="width: 20%" pSortableColumn="solicitante">
+                      Solicitante <p-sortIcon field="solicitante"></p-sortIcon>
+                    </th>
+                    <th style="width: 20%" pSortableColumn="categoria">
+                      Categoria <p-sortIcon field="categoria"></p-sortIcon>
+                    </th>
+                    <th style="width: 20%" pSortableColumn="dtCriacao">
+                      Data abertura <p-sortIcon field="dtCriacao"></p-sortIcon>
+                    </th>
+                    <th style="width: 10%" pSortableColumn="status">
+                      Status
+                    </th>
+
+                  </tr>
+                  <tr class="busca">
+                    <th>
+                      <input
+                        pInputText
+                        type="text"
+                        (input)="dt.filter($event.target.value, 'id', 'startsWith')"
+                        placeholder="Busca por Id"
+                        class="p-column-filter w-100"
+                      />
+                    </th>
+
+                    <th>
+                      <input
+                        pInputText
+                        type="text"
+                        (input)="dt.filter($event.target.value, 'solicitante', 'startsWith')"
+                        placeholder="Busca por solicitante"
+                        class="p-column-filter w-100"
+                      />
+                    </th>
+                    <th>
+                      <input
+                        pInputText
+                        type="text"
+                        (input)="dt.filter($event.target.value, 'adverso', 'startsWith')"
+                        placeholder="Busca por categoria"
+                        class="p-column-filter w-100"
+                      />
+                    </th>
+
+                    <th>
+                      <p-calendar
+                        (onSelect)="onDateSelect($event)"
+                        (onClearClick)="dt.filter('', 'dtCriacao', 'equals')"
+                        [showButtonBar]="true"
+                        placeholder="Data criação"
+                        [readonlyInput]="true"
+                        dateFormat="dd/mm/yy"
+                      ></p-calendar>
+                    </th>
+                    <th></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-chamado>
+                  <tr class="p-selectable-row" data-toggle="modal" data-target="#modal-detalhes" >
+                    <td>
+
+                      {{ chamado.id }}
+
+                    </td>
+
+                    <td>
+                      {{ chamado.solicitante }}
+                    </td>
+                    <td>
+                      {{ chamado.categoria }}
+                    </td>
+                    <td>
+                      {{ chamado.dtCriacao | date: 'dd/MM/yyyy' : 'UTC' }}
+                    </td>
+                    <td *ngIf="chamado.status == 'F'">Encerrado</td>
+                    <td *ngIf="chamado.status == 'A'">Aberto</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="8">Nenhum chamado encontrado</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+
+            </div>
+
+          </div>
+          <!--          <div class="card-footer">-->
+          <!--            <nav aria-label="Contacts Page Navigation">-->
+          <!--              <ul class="pagination justify-content-center m-0">-->
+          <!--                <li class="page-item" *ngFor="let p of pages; let i=index">-->
+          <!--                  <a class="page-link" href="" >{{i}}</a>-->
+          <!--                </li>-->
+          <!--              </ul>-->
+          <!--            </nav>-->
+          <!--          </div>-->
+          <!-- /.box-body -->
+          <!-- <div class="box-footer">
+            Footer
+          </div> -->
+          <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+      </div>
+
+
+
+    </div>
+  </section>
+  <!-- /.content -->
+</div>
+
+<div class="modal fade" id="modal-detalhes" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Cadastrar Rotina</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-group" name="formRotina" id="formRotina" #formValid="ngForm" >
+          <div class="form-group">
+            <label for="descricao">Descrição da rotina</label>
+            <input type="text" class="form-control" name="descricao"  #description id="descricao" required>
+          </div>
+          <div class="form-group">
+            <label>Módulos</label>
+
+            <!--            <small *ngIf="modulo.invalid && modulo.touched" class="p-error">Campo obrigatório</small>-->
+          </div>
+          <!-- ==================== -->
+          <!-- FOOTER Modal -->
+          <!-- ==================== -->
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" >Limpar</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Salvar</button>
+          </div>
+        </form>
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+</div>
