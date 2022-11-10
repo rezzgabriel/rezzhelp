@@ -47,7 +47,7 @@
             <!--            <a [routerLink]="['cadastra']" class="btn btn-outline-primary float-left ">-->
             <!--              + Novo Chamado-->
             <!--            </a>-->
-            <button pButton type="button" label="+ Novo Chamado" class="p-button-sm p-button-help p-button-outlined"></button>
+            <button pButton data-toggle="modal" data-target="#modal-create" type="button" label="+ Novo Chamado" class="p-button-sm p-button-help p-button-outlined"></button>
 
 
 
@@ -145,7 +145,7 @@
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-chamado>
-                  <tr class="p-selectable-row" data-toggle="modal" data-target="#modal-detalhes" >
+                  <tr class="p-selectable-row" data-toggle="modal" data-target="#modal-solucao" >
                     <td>
 
                       {{ chamado.id }}
@@ -200,11 +200,11 @@
   <!-- /.content -->
 </div>
 
-<div class="modal fade" id="modal-detalhes" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modal-create" style="display: none;" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Cadastrar Rotina</h4>
+        <h4 class="modal-title">Cadastrar Chamado</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
@@ -212,11 +212,20 @@
       <div class="modal-body">
         <form class="form-group" name="formRotina" id="formRotina" #formValid="ngForm" >
           <div class="form-group">
-            <label for="descricao">Descrição da rotina</label>
-            <input type="text" class="form-control" name="descricao"  #description id="descricao" required>
+            <label for="descricao">Categoria</label>
+            <p-dropdown
+              name="temas"
+              [showClear]="true"
+              optionValue="descricao"
+              [options]="categorias"
+
+              optionLabel="descricao"
+              placeholder="Selecione a categoria">
+            </p-dropdown>
           </div>
           <div class="form-group">
-            <label>Módulos</label>
+            <label>Descrição</label>
+            <input pInputText type="text" class="form-control" name="descricao" placeholder="Digite uma breve descrição"  #description id="descricao" required>
 
             <!--            <small *ngIf="modulo.invalid && modulo.touched" class="p-error">Campo obrigatório</small>-->
           </div>
@@ -226,6 +235,50 @@
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-danger" data-dismiss="modal" >Limpar</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal">Salvar</button>
+          </div>
+        </form>
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-solucao" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Solucionar Chamado</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-group" name="formSolucao" id="formSolucao" #formValid="ngForm" >
+          <div class="form-group">
+            <label for="descricao">Responsável</label>
+            <p-dropdown
+              name="temas"
+              [showClear]="true"
+              optionValue="descricao"
+              [options]="categorias"
+
+              optionLabel="descricao"
+              placeholder="Selecione o responsável">
+            </p-dropdown>
+          </div>
+          <div class="form-group">
+            <label>Solução</label>
+            <input pInputText type="text" class="form-control" name="solucao" placeholder="Digite a solução"  #solucao id="solucao" required>
+
+            <!--            <small *ngIf="modulo.invalid && modulo.touched" class="p-error">Campo obrigatório</small>-->
+          </div>
+          <!-- ==================== -->
+          <!-- FOOTER Modal -->
+          <!-- ==================== -->
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" >Limpar</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Encerrar chamado</button>
           </div>
         </form>
         <!---->

@@ -14,6 +14,7 @@ export class ChamadosListComponent implements OnInit {
   loading = false;
   chamados: Chamado[];
   selectedChamados: Chamado[];
+  categorias: any[];
 
   constructor() { }
 

@@ -8,6 +8,7 @@ import {CalendarModule} from 'primeng/calendar';
 import {InputTextModule} from 'primeng/inputtext';
 import {TableModule} from 'primeng/table';
 import {FormsModule} from '@angular/forms';
+import {DropdownModule} from 'primeng/dropdown';
 
 
 @NgModule({
@@ -15,13 +16,14 @@ import {FormsModule} from '@angular/forms';
     ChamadosListComponent,
     ChamadosDetalhesComponent
   ],
-  imports: [
-    CommonModule,
-    ChamadosRoutingModule,
-    CalendarModule,
-    InputTextModule,
-    TableModule,
-    FormsModule
-  ]
+    imports: [
+        CommonModule,
+        ChamadosRoutingModule,
+        CalendarModule,
+        InputTextModule,
+        TableModule,
+        FormsModule,
+        DropdownModule
+    ]
 })
 export class ChamadosModule { }
