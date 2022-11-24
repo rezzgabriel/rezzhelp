@@ -9,6 +9,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {TableModule} from 'primeng/table';
 import {FormsModule} from '@angular/forms';
 import {DropdownModule} from 'primeng/dropdown';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({

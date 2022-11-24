@@ -1,6 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Table} from 'primeng/table';
 import {Chamado} from '../entity/chamado';
+import {ChamadosService} from '../chamados.service';
+import {Categoria} from '../entity/categoria';
+import {Usuario} from '../entity/usuario';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-chamados-list',
@@ -14,46 +18,94 @@ export class ChamadosListComponent implements OnInit {
   loading = false;
   chamados: Chamado[];
   selectedChamados: Chamado[];
-  categorias: any[];
+  categorias: Categoria[];
+  usuarios: Usuario[];
+  newChamado: Chamado = new Chamado();
 
-  constructor() { }
+  constructor(private chamadosService: ChamadosService) { }
 
   ngOnInit(): void {
-    this.chamados = [
-      {
-        id: 1,
-        descricao: 'Estabilizador queimado',
-        responsavel: 'gabriel',
-        status: 'A',
-        solucao: 'Troca do estabilizador',
-        dtCriacao: new Date(),
-        dtFechamento: new Date(),
-        solicitante: 'Weudes',
-        categoria: 'Infraestrutura'
-      },
-      {
-        id: 2,
-        descricao: 'Estabilizador quebrado',
-        responsavel: 'gabriel',
-        status: 'F',
-        solucao: 'Troca do estabilizador',
-        dtCriacao: new Date(),
-        dtFechamento: new Date(),
-        solicitante: 'Clyeton',
-        categoria: 'Infraestrutura'
-      },
-      {
-        id: 3,
-        descricao: 'Monitor quebrado',
-        responsavel: 'Clyeton',
-        status: 'A',
-        solucao: 'Troca do monitor',
-        dtCriacao: new Date(),
-        dtFechamento: new Date(),
-        solicitante: 'Weudes',
-        categoria: 'Infraestrutura'
+    this.getChamadosAbertos();
+    this.getCategorias();
+    this.getUsuarios();
+  }
+
+  getChamados(): void {
+    this.chamadosService.getAllChamados().subscribe(
+      data => {
+        this.chamados = data;
+        console.log(data);
+      }, error => {
+        console.log(error);
       }
-    ];
+    );
+  }
+
+  getChamadosAbertos(): void {
+    this.chamadosService.getAllChamadosAbertos().subscribe(
+      data => {
+        this.chamados = data;
+        console.log(data);
+      }, error => {
+        console.log(error);
+      }
+    );
+  }
+
+  getChamadosEncerrados(): void {
+    this.chamadosService.getAllChamadosEncerrados().subscribe(
+      data => {
+        this.chamados = data;
+        console.log(data);
+      }, error => {
+        console.log(error);
+      }
+    );
+  }
+
+  getCategorias(): void {
+    this.chamadosService.getAllCategorias().subscribe(
+      data => {
+        this.categorias = data;
+        console.log(data);
+      }, error => {
+        console.log(error);
+      }
+    );
+  }
+
+  getUsuarios(): void {
+    this.chamadosService.getAllUsuarios().subscribe(
+      data => {
+        this.usuarios = data;
+        console.log(data);
+      }, error => {
+        console.log(error);
+      }
+    );
+  }
+
+  cadastraChamado(): void {
+    this.chamadosService.createChamado(this.newChamado).subscribe(
+      data => {
+        console.log(data);
+        Swal.fire({
+          icon: 'success',
+          title: 'Chamado cadastrado com sucesso',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        this.getChamados();
+      }, error => {
+        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Não foi possível cadastrar o chamado',
+          text: 'Preencha os dados corretamente',
+          showConfirmButton: true,
+        });
+      }
+    );
   }
 
   onDateSelect(value): void {

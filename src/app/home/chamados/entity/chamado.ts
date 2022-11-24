@@ -1,11 +1,14 @@
+import {Usuario} from './usuario';
+import {Categoria} from './categoria';
+
 export class Chamado {
   id: number;
   descricao: string;
-  responsavel: string; // refazer
+  responsavel: Usuario;
   status: string;
   solucao: string;
   dtCriacao: Date;
   dtFechamento: Date;
-  solicitante: string; // refazer
-  categoria: string; // refazer
+  solicitante: Usuario;
+  categoria: Categoria;
 }

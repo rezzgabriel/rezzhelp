@@ -53,13 +53,13 @@
 
             <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
               <label class="btn btn-outline-dark active">
-                <input type="radio" name="options" id="option_a1" autocomplete="off" checked="" > Chamados Abertos
+                <input type="radio" name="options" id="option_a1" autocomplete="off" checked="" (click)="getChamadosAbertos()"> Chamados Abertos
               </label>
               <label class="btn btn-outline-dark">
-                <input type="radio" name="options" id="option_a2" autocomplete="off" > Chamados Concluídos
+                <input type="radio" name="options" id="option_a2" autocomplete="off" (click)="getChamadosEncerrados()"> Chamados Concluídos
               </label>
               <label class="btn btn-outline-dark">
-                <input type="radio" name="options" id="option_a3" autocomplete="off" > Todos os Chamados
+                <input type="radio" name="options" id="option_a3" autocomplete="off" (click)="getChamados()"> Todos os Chamados
               </label>
             </div>
           </div>
@@ -116,7 +116,7 @@
                       <input
                         pInputText
                         type="text"
-                        (input)="dt.filter($event.target.value, 'solicitante', 'startsWith')"
+                        (input)="dt.filter($event.target.value, 'solicitante.nome', 'startsWith')"
                         placeholder="Busca por solicitante"
                         class="p-column-filter w-100"
                       />
@@ -125,7 +125,7 @@
                       <input
                         pInputText
                         type="text"
-                        (input)="dt.filter($event.target.value, 'adverso', 'startsWith')"
+                        (input)="dt.filter($event.target.value, 'categoria.descricao', 'startsWith')"
                         placeholder="Busca por categoria"
                         class="p-column-filter w-100"
                       />
@@ -145,7 +145,7 @@
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-chamado>
-                  <tr class="p-selectable-row" data-toggle="modal" data-target="#modal-solucao" >
+                  <tr class="p-selectable-row" [routerLink]="['/detalhes', chamado.id]" >
                     <td>
 
                       {{ chamado.id }}
@@ -153,10 +153,10 @@
                     </td>
 
                     <td>
-                      {{ chamado.solicitante }}
+                      {{ chamado.solicitante.nome }}
                     </td>
                     <td>
-                      {{ chamado.categoria }}
+                      {{ chamado.categoria.descricao }}
                     </td>
                     <td>
                       {{ chamado.dtCriacao | date: 'dd/MM/yyyy' : 'UTC' }}
@@ -216,25 +216,35 @@
             <p-dropdown
               name="temas"
               [showClear]="true"
-              optionValue="descricao"
               [options]="categorias"
-
+              [(ngModel)]="newChamado.categoria"
               optionLabel="descricao"
               placeholder="Selecione a categoria">
             </p-dropdown>
           </div>
           <div class="form-group">
             <label>Descrição</label>
-            <input pInputText type="text" class="form-control" name="descricao" placeholder="Digite uma breve descrição"  #description id="descricao" required>
+            <input pInputText type="text" class="form-control" [(ngModel)]="newChamado.descricao" name="descricao" placeholder="Digite uma breve descrição"  #description id="descricao" required>
 
             <!--            <small *ngIf="modulo.invalid && modulo.touched" class="p-error">Campo obrigatório</small>-->
+          </div>
+          <div class="form-group">
+            <label for="descricao">Solicitante</label>
+            <p-dropdown
+              name="solicitante"
+              [showClear]="true"
+              [options]="usuarios"
+              [(ngModel)]="newChamado.solicitante"
+              optionLabel="nome"
+              placeholder="Selecione o solicitante">
+            </p-dropdown>
           </div>
           <!-- ==================== -->
           <!-- FOOTER Modal -->
           <!-- ==================== -->
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-danger" data-dismiss="modal" >Limpar</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Salvar</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="cadastraChamado()">Salvar</button>
           </div>
         </form>
         <!---->
@@ -258,7 +268,7 @@
           <div class="form-group">
             <label for="descricao">Responsável</label>
             <p-dropdown
-              name="temas"
+              name="categorias"
               [showClear]="true"
               optionValue="descricao"
               [options]="categorias"

@@ -40,7 +40,7 @@
             </tr>
             <tr>
               <th class="text-nowrap" scope="row">Categoria:</th>
-              <td>{{ chamado.categoria }}</td>
+              <td>{{ chamado.categoria.descricao }}</td>
             </tr>
             <tr>
               <th class="text-nowrap" scope="row">Descrição:</th>
@@ -52,7 +52,7 @@
             </tr>
             <tr>
               <th class="text-nowrap" scope="row">Solicitante:</th>
-              <td>{{ chamado.solicitante }}</td>
+              <td>{{ chamado.solicitante.nome }}</td>
             </tr>
             <tr>
               <th class="text-nowrap" scope="row">Status:</th>
@@ -71,11 +71,12 @@
         </div>
 
         <div class="card-body">
-          <table class="table">
+          <button *ngIf="chamado.status == 'A'" pButton label="Solucionar Chamado" data-toggle="modal" data-target="#modal-solucao" class="p-button-sm p-button-help p-button-outlined mt-3" ></button>
+          <table *ngIf="chamado.solucao != null" class="table">
             <tbody>
             <tr>
               <th class="text-nowrap" scope="row">Responsável:</th>
-              <td>{{ chamado.responsavel }}</td>
+              <td>{{ chamado.responsavel.nome }}</td>
             </tr>
             <tr>
               <th class="text-nowrap" scope="row">Solução:</th>
@@ -96,3 +97,47 @@
   </section>
   <!-- /.content -->
 </div>
+
+<div class="modal fade" id="modal-solucao" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Solucionar Chamado</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-group" name="formSolucao" id="formSolucao" #formValid="ngForm" >
+          <div class="form-group">
+            <label>Responsável</label>
+            <p-dropdown
+              name="responsavel"
+              [showClear]="true"
+              [options]="usuarios"
+              [(ngModel)]="chamado.responsavel"
+              optionLabel="nome"
+              placeholder="Selecione o responsável">
+            </p-dropdown>
+          </div>
+          <div class="form-group">
+            <label>Solução</label>
+            <input pInputText type="text" class="form-control" name="solucao" [(ngModel)]="chamado.solucao" placeholder="Digite a solução"  #solucao id="solucao" required>
+
+            <!--            <small *ngIf="modulo.invalid && modulo.touched" class="p-error">Campo obrigatório</small>-->
+          </div>
+          <!-- ==================== -->
+          <!-- FOOTER Modal -->
+          <!-- ==================== -->
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" >Limpar</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="updateChamado()">Encerrar chamado</button>
+          </div>
+        </form>
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+</div>
+
